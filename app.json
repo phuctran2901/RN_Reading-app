@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "AwesomeProject",
-    "slug": "AwesomeProject",
+    "name": "Ghiền Đọc Truyện",
+    "slug": "GDT",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/iconapp.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1E1631"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -16,17 +16,28 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "facebookScheme" : "fb960093671290591",
+    "facebookAppId" : "960093671290591",
+    "facebookDisplayName" : "Ghiền Đọc Truyện",
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/iconapp.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.phuctran2901.awesomeproject",
+      "config" : {
+        "googleSignIn" : {
+          "apiKey" : "AIzaSyCtVR2bHmVnWE8F1EnMMOR3hn2K3d8ULmw",
+          "certificateHash" : "91gLREAoMj6HQzhPFM6cuhiSTfY="
+        }
+      },
+      "permissions" : ["profile", "email"]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/iconapp.png"
     }
   }
 }

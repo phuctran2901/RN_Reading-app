@@ -1,20 +1,39 @@
-import React, { useEffect } from "react";
-import { TouchableOpacity } from "react-native";
+import React from "react";
+import { TouchableOpacity, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HistoryScreen from "../screens/History/HistoryScreen";
 import HomeScreen from "../screens/Home/HomeScreen";
 import AccountScreen from "../screens/Account/AccountScreen";
-import NofiticationScreen from "../screens/Nofitication/NotificationScreen";
+import Review from "../screens/ReviewScreen/Review";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ContextAuth } from "../Context/AuthProvider";
 import { AntDesign } from "@expo/vector-icons";
 const BottomTab = createBottomTabNavigator();
 
 export default function HomeTab({ navigation }) {
+    const [isAuth] = React.useContext(ContextAuth);
+    const [user, setUser] = React.useState();
+
+    React.useEffect(() => {
+        getUser();
+        console.log("heelo");
+    }, [isAuth]);
+
+    const getUser = async () => {
+        const data = await AsyncStorage.getItem("user");
+        if (data) {
+            setUser(JSON.parse(data));
+        } else {
+            setUser(null);
+        }
+    };
     return (
         <BottomTab.Navigator
             screenOptions={{
-                tabBarActiveTintColor: "black",
+                tabBarActiveTintColor: "red",
                 tabBarInactiveTintColor: "#707070",
             }}
             initialRouteName={"Home"}
@@ -24,11 +43,11 @@ export default function HomeTab({ navigation }) {
                 component={HistoryScreen}
                 options={{
                     headerStyle: {
-                        shadowColor: "black",
-                        shadowOffset: 2,
+                        elevation: 0,
+                        shadowOpacity: 0,
                     },
                     tabBarLabel: "Tủ sách",
-                    tabBarIcon: ({ focused, color, size }) => {
+                    tabBarIcon: ({ color }) => {
                         return (
                             <Ionicons name="library" size={20} color={color} />
                         );
@@ -50,7 +69,7 @@ export default function HomeTab({ navigation }) {
                         shadowOffset: 2,
                     },
                     tabBarLabel: "Thư viện",
-                    tabBarIcon: ({ focused, color, size }) => {
+                    tabBarIcon: ({ color }) => {
                         return (
                             <AntDesign name="book" size={25} color={color} />
                         );
@@ -61,12 +80,29 @@ export default function HomeTab({ navigation }) {
                     },
                     headerTitle: "Thư viện",
                     headerRight: () => (
-                        <TouchableOpacity
-                            underlayColor="white"
-                            onPress={() => alert("Hello")}
-                        >
-                            <AntDesign name="search1" size={20} />
-                        </TouchableOpacity>
+                        <View style={{ flexDirection: "row" }}>
+                            <TouchableOpacity
+                                underlayColor="white"
+                                onPress={() => navigation.navigate("Search")}
+                            >
+                                <AntDesign name="search1" size={24} />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                underlayColor="white"
+                                style={{ marginLeft: 20 }}
+                                onPress={() =>
+                                    navigation.navigate("ListStory", {
+                                        tp: "cv",
+                                    })
+                                }
+                            >
+                                <AntDesign
+                                    name="barschart"
+                                    size={24}
+                                    color="black"
+                                />
+                            </TouchableOpacity>
+                        </View>
                     ),
                     headerRightContainerStyle: {
                         paddingRight: 20,
@@ -74,28 +110,50 @@ export default function HomeTab({ navigation }) {
                 }}
             />
             <BottomTab.Screen
-                name="Nofitication"
-                component={NofiticationScreen}
+                name="Review"
+                component={Review}
                 options={{
                     headerStyle: {
                         shadowColor: "black",
                         shadowOffset: 2,
                     },
-                    tabBarLabel: "Thông báo",
+                    tabBarLabel: "Tường",
+                    headerTitleAlign: "center",
                     tabBarIcon: ({ focused, color, size }) => {
                         return (
-                            <Ionicons
-                                name="notifications"
+                            <FontAwesome
+                                name="newspaper-o"
                                 size={20}
                                 color={color}
                             />
                         );
                     },
+                    headerRight: () => (
+                        <TouchableOpacity
+                            onPress={() => {
+                                if (isAuth || user) {
+                                    navigation.navigate("AddPost");
+                                } else {
+                                    navigation.navigate("Auth");
+                                }
+                            }}
+                        >
+                            <AntDesign
+                                name="addfolder"
+                                size={24}
+                                color="black"
+                            />
+                        </TouchableOpacity>
+                    ),
+                    headerRightContainerStyle: {
+                        paddingRight: 20,
+                        marginTop: 5,
+                    },
                     tabBarLabelStyle: {
                         fontSize: 12,
                         fontWeight: "600",
                     },
-                    headerTitle: "Thông báo",
+                    headerTitle: "Tường",
                 }}
             />
             <BottomTab.Screen

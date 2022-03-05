@@ -8,28 +8,31 @@ import {
     Dimensions,
 } from "react-native";
 
-export default function CardVertical({ item }) {
+export default function CardVertical({ item, height, navigation }) {
     return (
         <TouchableOpacity
             style={styles.wrapperCardVertical}
             activeOpacity={0.8}
+            onPress={() => {
+                navigation.navigate("Detail", { idStory: item.slug });
+            }}
         >
             <Image
                 style={{
                     width: "100%",
-                    height: 150,
+                    height: height ? height : 150,
                     borderRadius: 10,
                 }}
                 source={{
-                    uri: item.sourceImage,
+                    uri: item?.sourceImage,
                 }}
                 resizeMode="cover"
             />
             <Text numberOfLines={1} style={styles.textCardVertical}>
-                {item.title}
+                {item?.title}
             </Text>
-            <Text style={styles.textGenresCardVertical}>
-                {item.author.type}
+            <Text style={styles.textGenresCardVertical} numberOfLines={1}>
+                {item?.author?.type || item?.author}
             </Text>
         </TouchableOpacity>
     );
@@ -41,12 +44,13 @@ const styles = StyleSheet.create({
     wrapperCardVertical: {
         alignSelf: "stretch",
         marginVertical: 5,
-        flexBasis: widthWindow / 3.1,
+        flexBasis: widthWindow / 3.3333,
         marginHorizontal: 4,
+        width: widthWindow / 3.333333,
     },
     textCardVertical: {
         fontSize: 15,
-        marginTop: 5,
+        marginTop: 10,
     },
     textGenresCardVertical: {
         marginTop: 10,

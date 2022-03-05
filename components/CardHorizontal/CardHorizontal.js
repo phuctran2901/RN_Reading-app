@@ -8,11 +8,13 @@ import {
     TouchableHighlight,
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
-export default function CardHorizontal({ item }) {
+export default function CardHorizontal({ item, navigation }) {
     return (
         <TouchableHighlight
             underlayColor="#f0f0f0"
-            onPress={() => alert(item.slug)}
+            onPress={() =>
+                navigation.navigate("Detail", { idStory: item.slug })
+            }
         >
             <View style={styles.wrapperCardHorizontal}>
                 <View style={styles.wrapperImage}>
